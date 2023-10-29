@@ -1,12 +1,13 @@
+!python -m spacy download en_core_web_lg
 import pandas as pd
 import spacy
 from spacy.matcher import Matcher
-nlp = spacy.load("en_core_web_sm")
-nlp_2 = spacy.load("en_core_web_sm")
-nlp_3 = spacy.load("en_core_web_sm")
-nlp_4 = spacy.load("en_core_web_sm")
-nlp_5 = spacy.load("en_core_web_sm")
-nlp_6 = spacy.load("en_core_web_sm")
+nlp = spacy.load("en_core_web_lg")
+nlp_2 = spacy.load("en_core_web_lg")
+nlp_3 = spacy.load("en_core_web_lg")
+nlp_4 = spacy.load("en_core_web_lg")
+nlp_5 = spacy.load("en_core_web_lg")
+nlp_6 = spacy.load("en_core_web_lg")
 matcher = Matcher(nlp.vocab)
 matcher_no = Matcher(nlp.vocab)
 matcher_2 = Matcher(nlp_2.vocab)
@@ -15,7 +16,7 @@ matcher_address = Matcher(nlp_4.vocab)
 matcher_company = Matcher(nlp_5.vocab)
 matcher_jobdesc = Matcher(nlp_6.vocab)
 
-data = pd.read_excel(r'E:\Google Chrome\MyContacts.xlsx', engine='openpyxl', dtype = {'parsedTxt': object, 'fullname': str, 'company': str, 'job_title': str, 'address': object, 'phone': object, 'phone_2': object, 'email': object, 'email_2': object, 'website': object})
+data = pd.read_excel(r'MyContacts.xlsx', engine='openpyxl', dtype = {'parsedTxt': object, 'fullname': str, 'company': str, 'job_title': str, 'address': object, 'phone': object, 'phone_2': object, 'email': object, 'email_2': object, 'website': object})
 columns = ['fullname', 'company', 'job_title', 'address', 'phone', 'phone_2', 'email', 'email_2', 'website']
 actual_data = pd.DataFrame(columns=columns)
 n=0
@@ -87,7 +88,7 @@ for i in range(171):
                     if (token.ent_type_ == "PERSON" and token.text not in exclusion_list) and (not any(char in exclusion_list for char in token.text)) or (token.text in ["Chauhan","Jain"]):
                         count_2 += 1
                 if count_1 == count_2:
-                    data_to_append['fullname'] = span
+                    data_to_append['fullname'] = str(span)
 
 
     for k in range(len(matches_address)):
@@ -136,6 +137,14 @@ for i in range(171):
                     data_to_append['phone_2'] = str(span.text)
            
 
+pd.set_option('display.max_rows', None)
+pd.set_option('display.max_columns', None)
+pd.set_option('display.width', None)
+
 actual_data = pd.DataFrame(data_list)
 print("THE FINAL TABLE AFTER EXTRACTION IS:")
 print(actual_data)
+
+pd.reset_option('display.max_rows')
+pd.reset_option('display.max_columns')
+pd.reset_option('display.width')
